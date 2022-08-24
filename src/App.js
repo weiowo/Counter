@@ -21,24 +21,22 @@ function App() {
   const [currentNum, setCurrentNum] = useState(1)
   const [countInfo, setCountInfo] = useImmer(initialState)
     const [waitingLine, setWaitingLine] = useImmer([])
-  console.log(countInfo)
-  console.log("wait", waitingLine, waitingLine.length);
+    console.log("waiting的人：", waitingLine, "waiting長度", waitingLine.length)
 
-  async function getNumCard(){
+  function getNumCard(){
     setCurrentNum((prev)=>prev +1)
     setWaitingLine((draft)=> {draft.push(currentNum)})
   }
 
-  async function checkCounter(){
-    await getNumCard()
+  function checkCounter(){
+    getNumCard()
     setTimeout(()=> {
-    console.log("hello")
+    console.log("拿到號碼牌了")
     for(let i = 0; i< countInfo?.counters?.length; i++){
-      console.log("test")
+      console.log("拿完號碼牌，跑進for loop了")
       console.log("waitingLine.length", waitingLine.length)
       if(countInfo.counters[i].status === "idle" && waitingLine.length !== 0){
-        console.log("hey", countInfo)
-        console.log("waiting", waitingLine)
+        console.log("跑進for loop的if了", countInfo)
         console.log("shifted", waitingLine?.shift())
         setCountInfo((draft)=> {draft.counters[i].customerNum = waitingLine.shift()})
         setCountInfo((draft)=> { draft.counters[i].status = "busy"})
@@ -76,10 +74,11 @@ function App() {
           <div>幾號在辦理 {item.customerNum}</div>
         </div>
       ))}
-      <button onClick={()=> {getNumCard(); processing()}}>Next {currentNum}</button>
-      <button onClick={()=> checkCounter()}>test</button>
+      <button style={{ height:"30px" }} onClick={()=> { checkCounter(); processing()}}>Next {currentNum}</button>
+      {/* <button onClick={()=> checkCounter()}>test</button> */}
       <div style={{display: "flex", flexDirection: "column"}}>
-        <div>多少人在等 {waitingLine}</div>
+        <div>多少人在等 {waitingLine.length}</div>
+        <div>等待的號碼 {waitingLine?.map((item)=> (<div>{item}</div>))}</div>
       </div>
     </div>
   );
