@@ -9,7 +9,6 @@ color:black;
 export const Board = styled.div`
 width:60%;
 height:auto;
-background-color: beige;
 border-radius: 10px;
 margin-top: 20px;
 display: flex;
