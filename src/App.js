@@ -20,21 +20,20 @@ let initialState = {
     { name: "Cory", status: "idle", customerNum: 0, proceeded: [] },
     { name: "Dora", status: "idle", customerNum: 0, proceeded: [] },
   ],
-  waitingLine: [],
 };
 
 function getRandomTime(min, max) {
-  console.log(Math.random() * (max - min) + min);
   return (Math.random() * (max - min) + min) * 1000;
 }
 
 function App() {
   const [currentNum, setCurrentNum] = useState(1);
-  const [countInfo, setCountInfo] = useImmer(initialState);
+  const [counterInfo, setCounterInfo] = useImmer(initialState);
+  const [waitingLine, setWaitingLine] = useImmer([]);
   function getNumCard() {
     setCurrentNum((prev) => prev + 1);
-    setCountInfo((draft) => {
-      draft.waitingLine.push(currentNum);
+    setWaitingLine((draft) => {
+      draft.push(currentNum);
     });
   }
 
@@ -42,26 +41,29 @@ function App() {
     function check(element) {
       return element.status === "idle";
     }
-    if (countInfo.waitingLine.length === 0) {
+    if (waitingLine.length === 0) {
       return;
     }
-    const counterIndex = countInfo.counters.findIndex(check);
+    const counterIndex = counterInfo.counters.findIndex(check);
     if (counterIndex !== -1) {
-      const newCustomerNum = countInfo.waitingLine[0];
-      setCountInfo((draft) => {
-        draft.counters[counterIndex].customerNum = draft.waitingLine[0];
+      const newCustomerNum = waitingLine[0];
+      setCounterInfo((draft) => {
+        draft.counters[counterIndex].customerNum = waitingLine[0];
         draft.counters[counterIndex].status = "busy";
-        draft.waitingLine.shift();
       });
+      setWaitingLine((draft) => {
+        draft.shift();
+      });
+
       setTimeout(() => {
-        setCountInfo((draft) => {
+        setCounterInfo((draft) => {
           draft.counters[counterIndex].status = "idle";
           draft.counters[counterIndex].proceeded.push(newCustomerNum);
           draft.counters[counterIndex].customerNum = 0;
         });
       }, getRandomTime(0.5, 1.5));
     }
-  }, [countInfo, setCountInfo]);
+  }, [counterInfo.counters, setCounterInfo, waitingLine, setWaitingLine]);
 
   return (
     <div className="App">
@@ -72,7 +74,7 @@ function App() {
           <SubTitle>processing</SubTitle>
           <SubTitle>processed</SubTitle>
         </SubTitleWrapper>
-        {countInfo?.counters?.map((item) => (
+        {counterInfo?.counters?.map((item) => (
           <Counter key={item?.name}>
             <Column>{item.name}</Column>
             <Column>
@@ -82,7 +84,7 @@ function App() {
           </Counter>
         ))}
         <BelowPart>
-          <Waiting>Waiting：{countInfo.waitingLine.length}</Waiting>
+          <Waiting>Waiting：{waitingLine.length}</Waiting>
           <NextButton onClick={() => getNumCard()}>
             Next {currentNum}
           </NextButton>
