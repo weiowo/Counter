@@ -38,39 +38,72 @@ function App() {
     });
   }
 
+  // useEffect(() => {
+  //   function checkCounter() {
+  //     for (let i = 0; i < countInfo?.counters?.length; i++) {
+  //       if (
+  //         countInfo.counters[i].status === "idle" &&
+  //         countInfo.waitingLine.length !== 0
+  //       ) {
+  //         const newCustomNum = countInfo.waitingLine[0];
+  //         setCountInfo((draft) => {
+  //           draft.counters[i].customerNum = draft.waitingLine[0];
+  //         });
+  //         setCountInfo((draft) => {
+  //           draft.counters[i].status = "busy";
+  //         });
+  //         setCountInfo((draft) => {
+  //           draft.waitingLine.shift();
+  //         });
+  //         setTimeout(() => {
+  //           setCountInfo((draft) => {
+  //             draft.counters[i].status = "idle";
+  //           });
+  //           setCountInfo((draft) => {
+  //             draft.counters[i].proceeded.push(newCustomNum);
+  //           });
+  //           setCountInfo((draft) => {
+  //             draft.counters[i].customerNum = 0;
+  //           });
+  //         }, getRandomTime(0.5, 1.5));
+  //         break;
+  //       }
+  //     }
+  //   }
+  //   checkCounter();
+  // }, [countInfo, setCountInfo]);
+
   useEffect(() => {
-    function checkCounter() {
-      for (let i = 0; i < countInfo?.counters?.length; i++) {
-        if (
-          countInfo.counters[i].status === "idle" &&
-          countInfo.waitingLine.length !== 0
-        ) {
-          const newCustomNum = countInfo.waitingLine[0];
-          setCountInfo((draft) => {
-            draft.counters[i].customerNum = draft.waitingLine[0];
-          });
-          setCountInfo((draft) => {
-            draft.counters[i].status = "busy";
-          });
-          setCountInfo((draft) => {
-            draft.waitingLine.shift();
-          });
-          setTimeout(() => {
-            setCountInfo((draft) => {
-              draft.counters[i].status = "idle";
-            });
-            setCountInfo((draft) => {
-              draft.counters[i].proceeded.push(newCustomNum);
-            });
-            setCountInfo((draft) => {
-              draft.counters[i].customerNum = 0;
-            });
-          }, getRandomTime(0.5, 1.5));
-          break;
-        }
-      }
+    function check(element) {
+      console.log(element.status);
+      return element.status === "idle";
     }
-    checkCounter();
+    if (countInfo.waitingLine.length !== 0) {
+      let counterIndex = countInfo.counters.findIndex(check);
+      console.log(counterIndex);
+
+      const newCustomNum = countInfo.waitingLine[0];
+      setCountInfo((draft) => {
+        draft.counters[counterIndex].customerNum = draft.waitingLine[0];
+      });
+      setCountInfo((draft) => {
+        draft.counters[counterIndex].status = "busy";
+      });
+      setCountInfo((draft) => {
+        draft.waitingLine.shift();
+      });
+      setTimeout(() => {
+        setCountInfo((draft) => {
+          draft.counters[counterIndex].status = "idle";
+        });
+        setCountInfo((draft) => {
+          draft.counters[counterIndex].proceeded.push(newCustomNum);
+        });
+        setCountInfo((draft) => {
+          draft.counters[counterIndex].customerNum = 0;
+        });
+      }, getRandomTime(0.5, 1.5));
+    }
   }, [countInfo, setCountInfo]);
 
   return (
@@ -80,7 +113,7 @@ function App() {
         <SubTitleWrapper>
           <SubTitle>counter</SubTitle>
           <SubTitle>processing</SubTitle>
-          <SubTitle>proceeded</SubTitle>
+          <SubTitle>processed</SubTitle>
         </SubTitleWrapper>
         {countInfo?.counters?.map((item, index) => (
           <Counter key={item?.name}>

@@ -1,12 +1,17 @@
-# Getting Started with Create React App
+# Counter App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## How to get started ? 
 
-## Available Scripts
+1. Open your terminal, cd to this project folder.
+2. Run "npm install"
+3. Once finished, run "npm start"
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the detail.
 
-In the project directory, you can run:
+## How to add counters ? 
+You can add new counter information by creating a new object to  the counters array in the initialState (in the 16th line of code in App.js file).
 
-### `npm start`
+
+<!-- ### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -67,4 +72,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 ### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify) -->
